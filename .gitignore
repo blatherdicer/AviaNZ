@@ -1,3 +1,6 @@
+#ignore local run script
+AviaNZ.command
+
 # ignore compiled python sources
 *.pyc
 # ignore compiled C objects
