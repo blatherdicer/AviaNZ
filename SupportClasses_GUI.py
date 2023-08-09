@@ -25,10 +25,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import QMessageBox, QAbstractButton, QListWidget, QListWidgetItem, QPushButton, QSlider, QLabel, QHBoxLayout, QGridLayout, QWidget, QGraphicsRectItem, QLayout, QToolButton, QStyle, QColor, QPen, QBrush, QSizePolicy, QApplication, QPainter
+from PyQt5.QtWidgets import QMessageBox, QAbstractButton, QListWidget, QListWidgetItem, QPushButton, QSlider, QLabel, QHBoxLayout, QGridLayout, QWidget, QGraphicsRectItem, QLayout, QToolButton, QStyle, QSizePolicy, QApplication
 from PyQt5.QtCore import Qt, QTime, QIODevice, QBuffer, QByteArray, QMimeData, QLineF, QLine, QPoint, QSize, QDir, pyqtSignal
 from PyQt5.QtMultimedia import QAudio, QAudioOutput
-from PyQt5.QtGui import QIcon, QPixmap, QPainter, QPen, QColor, QFont, QDrag
+from PyQt5.QtGui import QIcon, QPixmap, QPainter, QPen, QColor, QFont, QDrag, QColor, QBrush
 
 import pyqtgraph as pg
 import pyqtgraph.functions as fn
