@@ -25,7 +25,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import QMessageBox, QAbstractButton, QListWidget, QListWidgetItem, QPushButton, QSlider, QLabel, QHBoxLayout, QGridLayout, QWidget, QGraphicsRectItem, QLayout
+from PyQt5.QtWidgets import QMessageBox, QAbstractButton, QListWidget, QListWidgetItem, QPushButton, QSlider, QLabel, QHBoxLayout, QGridLayout, QWidget, QGraphicsRectItem, QLayout, QToolButton, QStyle, QColor, QPen, QBrush, QSizePolicy, QApplication, QPainter
 from PyQt5.QtCore import Qt, QTime, QIODevice, QBuffer, QByteArray, QMimeData, QLineF, QLine, QPoint, QSize, QDir, pyqtSignal
 from PyQt5.QtMultimedia import QAudio, QAudioOutput
 from PyQt5.QtGui import QIcon, QPixmap, QPainter, QPen, QColor, QFont, QDrag
@@ -226,14 +226,14 @@ class TimeAxisWidget(QAbstractButton):
 class ShadedROI(pg.ROI):
     # A region of interest that is shaded, for marking segments
     def paint(self, p, opt, widget):
-        #brush = QtGui.QBrush(QtGui.QColor(0, 0, 255, 50))
+        #brush = QBrush(QColor(0, 0, 255, 50))
         if not hasattr(self, 'currentBrush'):
-            self.setBrush(QtGui.QBrush(QtGui.QColor(0, 0, 255, 50)))
+            self.setBrush(QBrush(QColor(0, 0, 255, 50)))
         if not hasattr(self, 'currentPen'):
-            self.setPen(QtGui.QPen(QtGui.QColor(255, 0, 0, 255)))
+            self.setPen(QPen(QColor(255, 0, 0, 255)))
         p.save()
         r = self.boundingRect()
-        p.setRenderHint(QtGui.QPainter.Antialiasing)
+        p.setRenderHint(QPainter.Antialiasing)
         p.setPen(self.currentPen)
         p.setBrush(self.currentBrush)
 
@@ -329,12 +329,12 @@ def mouseDragEventFlexibleLine(self, ev):
 class ShadedRectROI(ShadedROI):
     # A rectangular ROI that it shaded, for marking segments
     def __init__(self, pos, size, centered=False, movable=True, sideScalers=True, parent=None, **args):
-        #QtGui.QGraphicsRectItem.__init__(self, 0, 0, size[0], size[1])
+        #QGraphicsRectItem.__init__(self, 0, 0, size[0], size[1])
         pg.ROI.__init__(self, pos, size, movable=movable, **args)
         self.parent = parent
         self.mouseHovering = False
-        self.setBrush(QtGui.QBrush(QtGui.QColor(0, 0, 255, 50)))
-        self.setHoverBrush(QtGui.QBrush(QtGui.QColor(0, 0, 255, 100)))
+        self.setBrush(QBrush(QColor(0, 0, 255, 50)))
+        self.setHoverBrush(QBrush(QColor(0, 0, 255, 100)))
         self.transparent = True
 
         #self.addTranslateHandle(center)
@@ -405,7 +405,7 @@ class LinearRegionItem2(pg.LinearRegionItem):
         if self.parent is not None:
             self.lines[0].btn = self.parent.MouseDrawingButton
             self.lines[1].btn = self.parent.MouseDrawingButton
-        self.setHoverBrush(QtGui.QBrush(QtGui.QColor(0, 0, 255, 100)))
+        self.setHoverBrush(QBrush(QColor(0, 0, 255, 100)))
 
     def setHoverBrush(self, *br, **kargs):
         self.hoverBrush = fn.mkBrush(*br, **kargs)
@@ -904,13 +904,13 @@ class FlowLayout(QLayout):
         for item in self.itemList:
             wid = item.widget()
             spaceX = self.spacing() + wid.style().layoutSpacing(
-                QtGui.QSizePolicy.PushButton,
-                QtGui.QSizePolicy.PushButton,
+                QSizePolicy.PushButton,
+                QSizePolicy.PushButton,
                 QtCore.Qt.Horizontal)
 
             spaceY = self.spacing() + wid.style().layoutSpacing(
-                QtGui.QSizePolicy.PushButton,
-                QtGui.QSizePolicy.PushButton,
+                QSizePolicy.PushButton,
+                QSizePolicy.PushButton,
                 QtCore.Qt.Vertical)
 
             nextX = x + item.sizeHint().width() + spaceX
@@ -979,8 +979,8 @@ class PicButton(QAbstractButton):
         self.cluster = cluster
         self.setMouseTracking(True)
 
-        self.playButton = QtGui.QToolButton(self)
-        self.playButton.setIcon(self.style().standardIcon(QtGui.QStyle.SP_MediaPlay))
+        self.playButton = QToolButton(self)
+        self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
         self.playButton.hide()
 
         # batmode frequency guides (in Y positions 0-1)
@@ -1111,7 +1111,7 @@ class PicButton(QAbstractButton):
         if self.noaudio:
             return
         if not self.media_obj.isPlaying():
-            self.playButton.setIcon(self.style().standardIcon(QtGui.QStyle.SP_MediaPlay))
+            self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
         self.playButton.show()
 
     def leaveEvent(self, QEvent):
@@ -1135,7 +1135,7 @@ class PicButton(QAbstractButton):
         if self.media_obj.isPlaying():
             self.stopPlayback()
         else:
-            self.playButton.setIcon(self.style().standardIcon(QtGui.QStyle.SP_MediaStop))
+            self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaStop))
             self.media_obj.loadArray(self.audiodata)
 
     def endListener(self):
@@ -1149,7 +1149,7 @@ class PicButton(QAbstractButton):
     def stopPlayback(self):
         self.media_obj.pressedStop()
         self.playButton.hide()
-        self.playButton.setIcon(self.style().standardIcon(QtGui.QStyle.SP_MediaPlay))
+        self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
 
     def sizeHint(self):
         return self.im1.size()
@@ -1175,7 +1175,7 @@ class PicButton(QAbstractButton):
         self.paintEvent(ev)
         #self.update()
         self.repaint()
-        pg.QtGui.QApplication.processEvents()
+        pg.QApplication.processEvents()
 
 
 class Layout(pg.LayoutWidget):
