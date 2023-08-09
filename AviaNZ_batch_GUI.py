@@ -1493,6 +1493,9 @@ class AviaNZ_reviewAll(QMainWindow):
         # store position etc to carry over to the next file dialog
         self.dialogSize = self.humanClassifyDialog2.size()
         self.dialogPos = self.humanClassifyDialog2.pos()
+
+        # TO DO: AttributeError: 'HumanClassify2' object has no attribute 'specControls'
+        print(self.humanClassifyDialog2)
         self.config['brightness'] = self.humanClassifyDialog2.specControls.brightSlider.value()
         self.config['contrast'] = self.humanClassifyDialog2.specControls.contrSlider.value()
         if not self.config['invertColourMap']:
