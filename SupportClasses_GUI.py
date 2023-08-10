@@ -1175,7 +1175,7 @@ class PicButton(QAbstractButton):
         self.paintEvent(ev)
         #self.update()
         self.repaint()
-        pg.QtGui.QApplication.processEvents()
+        pg.QtWidgets.QApplication.processEvents()
 
 
 class Layout(pg.LayoutWidget):

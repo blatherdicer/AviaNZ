@@ -2413,6 +2413,8 @@ class HumanClassify2(QDialog):
         specControls.colChanged.connect(self.setColourLevels)
         specControls.volChanged.connect(self.volSliderMoved)
         specControls.layout().addStretch(3) # add a big stretchable outer margin
+        # Testing BRR
+        self.specControls = specControls
 
         # batmode customizations:
         self.guidefreq = guidefreq
