@@ -39,8 +39,15 @@ a = Analysis(
     datas=datas,
     hiddenimports=["metal_compat"],
     excludes=["tkinter", "IPython", "jupyter", "notebook", "pytest"],
+    runtime_hooks=[os.path.join(SPECPATH, "rthook_mplconfig.py")],
     noarchive=False,
 )
+# Drop PyInstaller's matplotlib hook: it points MPLCONFIGDIR at a fresh temp dir on every
+# launch (font cache rebuilt each start). rthook_mplconfig.py uses a persistent cache instead.
+_n = len(a.scripts)
+a.scripts = [s for s in a.scripts if s[0] != "pyi_rth_mplconfig"]
+if len(a.scripts) != _n - 1:
+    raise SystemExit("pyi_rth_mplconfig runtime hook not found - check PyInstaller version")
 pyz = PYZ(a.pure)
 
 exe = EXE(

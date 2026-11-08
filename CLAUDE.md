@@ -25,6 +25,7 @@ Keep changes to what makes AviaNZ run correctly on M-series Macs: dependencies, 
 - `metal_compat.apply()` is called on import in `NNModels.py` and `NN.py`. On Apple silicon it disables Grappler's meta-optimizer, because tensorflow-metal >=1.0 computes the fused Dense+ReLU wrongly on the GPU.
 - Inside the app bundle it also loads `<_MEIPASS>/tensorflow-plugins`, but only if no GPU is registered yet. Loading the plugin twice aborts with "platform is already registered".
 - `uv run python scripts/check_metal.py` reports whether the bug still exists and whether the workaround fixes it. Run it after any TF or tensorflow-metal upgrade.
+- App start-up: `packaging/AviaNZ.spec` removes PyInstaller's `pyi_rth_mplconfig` hook, which used a new temp `MPLCONFIGDIR` on every launch and so rebuilt matplotlib's font cache each time (about 20 s per start). In its place, `packaging/rthook_mplconfig.py` uses `~/Library/Caches/AviaNZ/matplotlib`. Only the first launch builds the cache.
 - Environment variables: `AVIANZ_DISABLE_GPU=1` (CPU only), `AVIANZ_METAL_WORKAROUND=0` (testing only), `AVIANZ_CONFIG_DIR` (overrides `~/.avianz`).
 
 ## Testing approach that worked
