@@ -1,0 +1,65 @@
+[project]
+name = "avianz"
+version = "3.4.0"
+description = "AviaNZ: annotation and recognition of animal sounds in long field recordings"
+readme = "README.md"
+license = { file = "LICENSE.txt" }
+# tensorflow-metal 1.2.0 only ships wheels for CPython <= 3.12, so 3.12 is the ceiling on Apple silicon.
+requires-python = ">=3.11,<3.13"
+
+# Lower bounds = versions upstream (smarsland/AviaNZ requirements.txt) is tested with.
+# Upper bounds = next minor/major, to avoid silent API breaks. Exact versions live in uv.lock.
+dependencies = [
+    "click>=8.2.1,<9",
+    "h5py>=3.13,<4",
+    "jsonschema>=4.24,<5",
+    "librosa>=0.11,<0.12",
+    "lxml>=5.4",
+    "matplotlib>=3.10,<4",
+    "numba>=0.61.2",
+    "numpy>=2.1,<2.2",                 # tensorflow 2.19 requires numpy < 2.2
+    "openpyxl>=3.1.5,<4",
+    "packaging",                       # imported directly by NNModels.py
+    "peakutils>=1.3",                  # imported lazily by Segment.py (template matching)
+    "pillow",                          # imported directly by AviaNZ_manual.py
+    "pyfftw>=0.15,<0.16",
+    "pyflac>=3.0,<4",
+    "PyQt6>=6.9,<7",
+    "pyqtgraph>=0.13.7,<0.14",
+    "resampy>=0.4.3,<0.5",
+    "scikit-image>=0.25,<0.26",
+    "scikit-learn>=1.6",               # imported directly by Clustering.py / Training.py
+    "scipy>=1.16.3,<1.17",             # 1.15.x wheels are rejected by the macOS 27 dynamic loader
+    "soundfile>=0.13,<0.14",
+    # tensorflow-metal 1.2.0 fails to load with TF >= 2.20 (missing _pywrap_tensorflow_internal.so).
+    # Keep the cap on every platform so all users run the same TF/Keras.
+    "tensorflow>=2.18,<2.20",
+    # Apple GPU acceleration. Only installed on Apple-silicon macOS.
+    # NOTE: requires the workaround in metal_compat.py - see docs/MAC_APPLE_SILICON.md.
+    "tensorflow-metal==1.2.0 ; sys_platform == 'darwin' and platform_machine == 'arm64'",
+]
+
+[dependency-groups]
+# Needed to compile the Cython/C extensions in ext/ (scripts/build_ext.sh).
+build = [
+    "cython>=3.1,<4",
+    "setuptools>=70",
+]
+# Freezing a standalone .app (optional).
+bundle = [
+    "pyinstaller>=6.11",
+]
+
+[tool.uv]
+# AviaNZ is an application run from its source tree, not an installable package.
+package = false
+default-groups = ["build"]
+# Never resolve against whatever python happens to be on PATH (e.g. an Intel Homebrew
+# python in /usr/local); always use a uv-managed CPython of the right architecture.
+python-preference = "only-managed"
+# Lock for the platforms we care about so the lockfile is valid everywhere.
+environments = [
+    "sys_platform == 'darwin' and platform_machine == 'arm64'",
+    "sys_platform == 'linux'",
+    "sys_platform == 'win32'",
+]

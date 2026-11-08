@@ -73,7 +73,10 @@ def mainlauncher(cli, cheatsheet, zooniverse, infile, imagefile, batchmode, trai
         raise
 
     # determine location of config file and bird lists
-    if platform.system() == 'Windows':
+    # AVIANZ_CONFIG_DIR overrides the default (e.g. to test a new version side by side)
+    if os.environ.get("AVIANZ_CONFIG_DIR"):
+        configdir = os.path.expanduser(os.environ["AVIANZ_CONFIG_DIR"])
+    elif platform.system() == 'Windows':
         # Win
         configdir = os.path.expandvars(os.path.join("%APPDATA%", "AviaNZ"))
     elif platform.system() == 'Linux' or platform.system() == 'Darwin':

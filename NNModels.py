@@ -1,4 +1,6 @@
 import tensorflow as tf
+import metal_compat
+metal_compat.apply()  # Apple-silicon GPU correctness fix; no-op elsewhere
 import os
 import shutil
 from packaging import version
