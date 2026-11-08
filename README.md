@@ -55,7 +55,11 @@ uv run python AviaNZ.py
 scripts/build_app.sh             # -> dist/AviaNZ.app (about 1.4 GB, ad-hoc signed, arm64 only)
 scripts/build_app.sh --dmg       # also dist/AviaNZ-<version>.dmg
 ```
-Copy `dist/AviaNZ.app` to `/Applications`. The app bundles Python, Qt, TensorFlow with the Metal plugin, the C extensions, and the default config and recognisers. It is ad-hoc signed, which is fine on the Mac that built it. To give it to other people, it would need to be signed with an Apple Developer ID and notarized. Batch mode also works from a terminal: `/Applications/AviaNZ.app/Contents/MacOS/AviaNZ -c -b -d <folder> -r "<recogniser>"`.
+Copy `dist/AviaNZ.app` to `/Applications`.
+
+**First launch after each build:** macOS Gatekeeper blocks a double-click on an ad-hoc signed app. Double-click it once, dismiss the warning, then go to **System Settings → Privacy & Security** and click **Open Anyway** for AviaNZ. macOS remembers this for that build only, so it has to be done again after each rebuild. Launching from a terminal is not affected. The only permanent fix is signing with an Apple Developer ID and notarizing. The first launch also builds matplotlib's font cache (about 30 s, cached in `~/Library/Caches/AviaNZ`); later launches take a few seconds.
+
+The app bundles Python, Qt, TensorFlow with the Metal plugin, the C extensions, and the default config and recognisers. It is ad-hoc signed, which is fine on the Mac that built it. To give it to other people, it would need to be signed with an Apple Developer ID and notarized. Batch mode also works from a terminal: `/Applications/AviaNZ.app/Contents/MacOS/AviaNZ -c -b -d <folder> -r "<recogniser>"`.
 
 ### Versions and why
 | Component | Version | Reason |
