@@ -52,6 +52,19 @@ def apply(verbose=True):
         return
 
     gpus = tf.config.list_physical_devices("GPU")
+
+    # In a PyInstaller app bundle TensorFlow may not find the Metal plugin by itself.
+    # Load it explicitly, but only if it isn't already registered (loading twice aborts).
+    if not gpus and getattr(sys, "frozen", False):
+        plugin_dir = os.path.join(getattr(sys, "_MEIPASS", ""), "tensorflow-plugins")
+        if os.path.isdir(plugin_dir):
+            try:
+                from tensorflow.python.framework import load_library
+                load_library.load_pluggable_device_library(plugin_dir)
+                gpus = tf.config.list_physical_devices("GPU")
+            except Exception as e:
+                print("TensorFlow: could not load bundled Metal plugin (%s), using CPU" % e)
+
     if not gpus:
         if verbose:
             print("TensorFlow: no Metal GPU found (is tensorflow-metal installed?), using CPU")

@@ -35,7 +35,7 @@ dependencies = [
     # Keep the cap on every platform so all users run the same TF/Keras.
     "tensorflow>=2.18,<2.20",
     # Apple GPU acceleration. Only installed on Apple-silicon macOS.
-    # NOTE: requires the workaround in metal_compat.py - see docs/MAC_APPLE_SILICON.md.
+    # NOTE: requires the workaround in metal_compat.py - see "Apple-silicon Macs" in README.md.
     "tensorflow-metal==1.2.0 ; sys_platform == 'darwin' and platform_machine == 'arm64'",
 ]
 
