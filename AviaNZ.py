@@ -210,7 +210,12 @@ def mainlauncher(cli, cheatsheet, zooniverse, infile, imagefile, batchmode, trai
             avianz = None
             if task == 1:
                 import AviaNZ_manual
-                avianz = AviaNZ_manual.AviaNZ(configdir=configdir)
+                try:
+                    avianz = AviaNZ_manual.AviaNZ(configdir=configdir)
+                except AviaNZ_manual.FileChoiceCancelled:
+                    # user declined to choose a file: back to the start screen
+                    task = None
+                    continue
             elif task==2:
                 import AviaNZ_batch_GUI
                 avianz = AviaNZ_batch_GUI.AviaNZ_batchWindow(configdir=configdir)

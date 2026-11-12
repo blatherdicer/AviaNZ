@@ -107,6 +107,13 @@ pg.setConfigOption('background','w')
 pg.setConfigOption('foreground','k')
 pg.setConfigOption('antialias',True)
 
+class FileChoiceCancelled(Exception):
+    """ Raised from AviaNZ.__init__ when the user declines to choose a sound file.
+        AviaNZ.py catches it and returns to the start screen. (Calling sys.exit() inside
+        the half-built window crashed PyQt's exit clean-up with SIGBUS.) """
+    pass
+
+
 class AviaNZ(QMainWindow):
     """Main class for the user interface.
     Contains most of the user interface and plotting code"""
@@ -240,7 +247,7 @@ class AviaNZ(QMainWindow):
                     if reply == 2:
                         firstFile, drop = QFileDialog.getOpenFileName(self, 'Choose File', self.SoundFileDir, "WAV or BMP files (*.wav *.bmp);; Only WAV files (*.wav);; Only BMP files (*.bmp);; FLAC files (*.flac)")
                     else:
-                        sys.exit()
+                        raise FileChoiceCancelled()
 
         # parse firstFile to dir and file parts
         if not cheatsheet and not zooniverse:
